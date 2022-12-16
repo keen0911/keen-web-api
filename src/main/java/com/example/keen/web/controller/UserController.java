@@ -55,9 +55,11 @@ public class UserController {
         boolean result = (boolean) map.get("result");
         if (result) {
             int userId = (int) map.get("userId");
-            StpUtil.setLoginId(userId);
+            StpUtil.login(userId);
             Set<String> permissions = userService.searchUserPermissions(userId);
+            String token=StpUtil.getTokenInfo().getTokenValue();
             map.remove("userId");
+            map.put("token",token);
             map.put("permissions", permissions);
         }
         return R.ok(map);
@@ -98,8 +100,7 @@ public class UserController {
         Integer userId=userService.login(param);
         R r=R.ok().put("result",userId!=null?true:false);
         if(userId!=null){
-            StpUtil.setLoginId(userId);
-//            StpUtil.login(userId);
+            StpUtil.login(userId);
             Set<String> permissions=userService.searchUserPermissions(userId);
             String token=StpUtil.getTokenInfo().getTokenValue();
             r.put("permissions",permissions).put("token",token);

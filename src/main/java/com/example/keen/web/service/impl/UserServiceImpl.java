@@ -41,15 +41,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HashMap createQrCode() {
-        String uuid = IdUtil.simpleUUID();
-        redisTemplate.opsForValue().set(uuid, false, 5, TimeUnit.MINUTES);
+        //测试版小程序只能先写死
+        String tid = IdUtil.simpleUUID();
+/*        String tid = "7baf183a73474ffca4fa69279eb921c1";*/
+        redisTemplate.opsForValue().set(tid, false, 5, TimeUnit.MINUTES);
         QrConfig config = new QrConfig();
         config.setHeight(160);
         config.setWidth(160);
         config.setMargin(1);
-        String base64 = QrCodeUtil.generateAsBase64("login@@@" + uuid, config, ImgUtil.IMAGE_TYPE_JPG);
+        String base64 = QrCodeUtil.generateAsBase64("https://www.keen0911.top/keenwxlogin?" +"tid="+ tid, config, ImgUtil.IMAGE_TYPE_JPG);
         HashMap map = new HashMap() {{
-            put("uuid", uuid);
+            put("uuid", tid);//web前端定义为uuid
             put("pic", base64);
         }};
         return map;
